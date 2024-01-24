@@ -50,4 +50,5 @@ if [ "$status_code" == "301" ]; then
     echo "Redirection successfully configured. ✅"
 else
     echo "Failed to configure redirection. ❌"
+    echo "Curl output: $curl_output"
 fi
