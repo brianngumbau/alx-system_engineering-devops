@@ -2,38 +2,45 @@
 #configures nginx server to have custom 404 page
 #that contains the string Ceci n'est pas une page
 
-# Install Nginx web server
+# Install nginx
 sudo apt-get update
 sudo apt-get install -y nginx
 
-# Create a custom 404 error page with the required string
-echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html
+echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
 
-# Create a configuration file for the custom 404 page
-sudo sh -c 'echo "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+# add the following configuration to the existing server block
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.google.com permanent;"
 
-    root /usr/share/nginx/html;
-    index index.html index.htm index.nginx-debian.html;
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-    server_name _;
+# code for error page and redirect error 404
+echo "Ceci n'est pas une page" > /var/www/html/404.html
 
-    error_page 404 /404.html;
-    location = /404.html {
-        internal;
-    }
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-}" > /etc/nginx/sites-available/default'
+# starting nginx service
+sudo service nginx start
 
-# Create a symbolic link to enable the configuration
-sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+# allowing nginx on firewall
+sudo ufw allow 'Nginx HTTP'
 
-# Test Nginx configuration
-sudo nginx -t
+# Give the user ownership to website files for easy editing
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
 
-# Reload Nginx to apply changes
-sudo service nginx reload
+# Backup default index
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# Creating new index
+echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Setting up /redirect_me to a youtube video
+sudo sed -i '24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# Set up a 404 page
+echo "Ceci n'est pas une page" >> /var/www/html/error_404.html
+sudo sed -i '25i\	error_page 404 /error_404.html;' /etc/nginx/sites-available/default
+
+# Restarting nginx
+sudo service nginx restart
