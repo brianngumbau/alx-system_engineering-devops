@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 #configures nginx server to have custom 404 page
 #that contains the string Ceci n'est pas une page
 
