@@ -1,9 +1,53 @@
 #!/usr/bin/env bash
+
 # Configure Nginx server so that /redirect_me is redirecting to another page
 
 sudo apt-get update
 sudo apt-get install -y nginx
-string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.google.com permanent;"
 
-sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
-service nginx restart
+# Set up a custom 404 page
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+# Create a backup of the default Nginx configuration file
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+
+# Configure Nginx for redirection
+sudo bash -c 'cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 http://www.google.com;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF'
+
+# Create a symbolic link to enable the site
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+# Restart Nginx service to apply changes
+sudo service nginx restart
+
+# Check if the redirection is configured correctly
+status_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/redirect_me)
+
+if [ "$status_code" == "301" ]; then
+    echo "Redirection successfully configured. ✅"
+else
+    echo "Failed to configure redirection. ❌"
+fi
