@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# install netstat for debugging
+sudo apt-get update
+sudo apt-get install -y net-tools
+
+# Check if Nginx is listening on port 80
+netstat -tulpn | grep nginx
+
+# Install or reinstall Nginx
+sudo apt-get install -y --reinstall nginx
+
+# Check Nginx service status
+sudo service nginx status
+
+# Backup Nginx default configuration
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+
+# Configure Nginx to listen on port 80
+sudo sed -i 's/\blisten 80\b/listen 80 default_server;/g' /etc/nginx/sites-available/default
+
+# Reload Nginx to apply changes
+sudo service nginx reload
+
+# Check if Nginx is now listening on port 80
+netstat -tulpn | grep nginx
