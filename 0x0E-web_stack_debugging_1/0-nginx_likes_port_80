@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# fixes ubuntu container's Ngnix installation to listen on port 80
 
 # install netstat for debugging
 sudo apt-get update
