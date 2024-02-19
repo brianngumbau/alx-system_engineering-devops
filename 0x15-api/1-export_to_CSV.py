@@ -32,4 +32,4 @@ if __name__ == "__main__":
                 row.append(k['completed'])
                 row.append(k['title'])
 
-                writ.writerow(row)
+                write.writerow(row)
