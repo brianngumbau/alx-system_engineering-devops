@@ -29,8 +29,8 @@ if __name__ == "__main__":
 
         if k['userId'] == int(argv[1]):
             new_dict['username'] = u_name
-            new_dict['task'] = i['title']
-            new_dict['completed'] = i['completed']
+            new_dict['task'] = k['title']
+            new_dict['completed'] = k['completed']
             row.append(new_dict)
 
     final_dict = {}
