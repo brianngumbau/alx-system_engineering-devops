@@ -1,30 +1,19 @@
 #!/usr/bin/env bash
-# fixes ubuntu container's Ngnix to listen on port 80
 
-# install netstat for debugging
+# Install nginx if not already installed
 sudo apt-get update
-sudo apt-get install -y net-tools
+sudo apt-get install -y nginx
 
-# Check if Nginx is listening on port 80
-netstat -tulpn | grep 80
+# Configure nginx to listen on port 80
+sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
 
-# Install or reinstall Nginx
-sudo apt-get install -y --reinstall nginx
+# Restart nginx to apply the changes
+service nginx restart
 
-# Check Nginx service status
-sudo service nginx status
+# Check if nginx is listening on port 80
+netstat -tuln | grep ':80';
 
-# Backup Nginx default configuration
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default
+# Return a web page with HTTP 200 on port 80
+echo -e "HTTP/1.1 200 OK\nContent-Type: text/html\n\n<html><body><h1>Hello, world!</h1></body></html>" | nc -l -p 80 -q 1
 
-# Configure Nginx to listen on port 80
-sudo sed -i 's/\blisten 80\b/listen 80 default_server;/g' /etc/nginx/sites-available/default
-
-# Reload Nginx to apply changes
-sudo service nginx reload
-
-# Check if Nginx is now listening on port 80
-netstat -tulpn | grep 80
-
-# Start Nginx
-sudo service nginx start
+exit 0
