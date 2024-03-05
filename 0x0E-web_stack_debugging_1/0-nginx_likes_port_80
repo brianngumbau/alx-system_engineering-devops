@@ -25,3 +25,6 @@ sudo service nginx reload
 
 # Check if Nginx is now listening on port 80
 netstat -tulpn | grep 80
+
+# Start Nginx
+sudo service nginx start

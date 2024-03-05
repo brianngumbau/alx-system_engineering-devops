@@ -1,9 +1,8 @@
 Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease
-Get:2 http://archive.ubuntu.com/ubuntu focal-updates InRelease [114 kB]
+Hit:2 http://archive.ubuntu.com/ubuntu focal-updates InRelease
 Hit:3 http://security.ubuntu.com/ubuntu focal-security InRelease
 Hit:4 http://ppa.launchpad.net/brightbox/ruby-ng/ubuntu focal InRelease
 Hit:5 http://archive.ubuntu.com/ubuntu focal-backports InRelease
-Fetched 114 kB in 6s (20.3 kB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -20,7 +19,7 @@ Need to get 3,620 B of archives.
 After this operation, 0 B of additional disk space will be used.
 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 nginx all 1.18.0-0ubuntu1.4 [3,620 B]
 debconf: delaying package configuration, since apt-utils is not installed
-Fetched 3,620 B in 0s (27.0 kB/s)
+Fetched 3,620 B in 0s (29.3 kB/s)
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 76691 files and directories currently installed.)
 Preparing to unpack .../nginx_1.18.0-0ubuntu1.4_all.deb ...
 Unpacking nginx (1.18.0-0ubuntu1.4) over (1.18.0-0ubuntu1.4) ...
@@ -31,3 +30,5 @@ cp: '/etc/nginx/sites-available/default' and '/etc/nginx/sites-available/default
    ...fail!
 tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      788/nginx: master p 
 tcp6       0      0 :::80                   :::*                    LISTEN      788/nginx: master p 
+ * Starting nginx nginx
+   ...done.
